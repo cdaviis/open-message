@@ -4,7 +4,7 @@
  * Skipped when dist is not present so plain `npm test` still passes.
  */
 
-import { describe, it, expect, beforeAll } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { execSync } from 'node:child_process';
 import path from 'node:path';
 import fs from 'node:fs';
