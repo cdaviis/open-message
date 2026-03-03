@@ -1,5 +1,18 @@
 import { dispatch } from './core/dispatcher.js';
-import type { SendOptions, SendResult, ServiceAdapter, PigeonTemplate, CredentialStore } from './types.js';
+import { validateContentSize } from './core/limits.js';
+import type {
+  SendOptions,
+  SendResult,
+  ServiceAdapter,
+  PigeonTemplate,
+  CredentialStore,
+  MessageLimits,
+  ChunkingConfig,
+  TemplateDestination,
+  TemplateVariable,
+  ContentSizeValidationResult,
+} from './types.js';
+import { ContentSizeError, InvalidTemplatePathError, TemplateNotFoundError } from './types.js';
 
 export async function send(
   template: string,
@@ -9,6 +22,19 @@ export async function send(
   return dispatch(template, { ...opts, vars });
 }
 
-export type { SendOptions, SendResult, ServiceAdapter, PigeonTemplate, CredentialStore };
+export type {
+  SendOptions,
+  SendResult,
+  ServiceAdapter,
+  PigeonTemplate,
+  CredentialStore,
+  MessageLimits,
+  ChunkingConfig,
+  TemplateDestination,
+  TemplateVariable,
+  ContentSizeValidationResult,
+};
+
+export { validateContentSize, ContentSizeError, InvalidTemplatePathError, TemplateNotFoundError };
 
 export default { send };

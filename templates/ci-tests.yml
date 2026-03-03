@@ -1,18 +1,15 @@
 version: '1'
-name: CI Build Notification
-description: Slack notification for PigeonJS CI runs
+name: CI Tests Notification
+description: Post to #tests when tests run in GitHub Actions, with link to the run
 
-destinations:
-  - slack:
-      settings:
-        channel: '{{SLACK_CHANNEL_TESTS}}'
-  - slack:
-      settings:
-        channel: '{{SLACK_CHANNEL_RELEASES}}'
+destination:
+  service: slack
+  settings:
+    channel: '{{SLACK_CHANNEL_TESTS}}'
 
 variables:
   status:
-    description: Build status (success, failure)
+    description: Run status (success, failure, etc.)
     required: true
   branch:
     description: Git branch
@@ -24,13 +21,13 @@ variables:
     description: Workflow name
     required: true
   run_url:
-    description: URL to the workflow run
+    description: URL to the GitHub Actions run
     required: true
 
-messages:
+message:
   blocks:
     - header:
-        text: ':bird: PigeonJS CI — {{status}}'
+        text: ':test_tube: Tests ran — {{status}}'
     - section:
         fields:
           - '*Branch:*\n`{{branch}}`'

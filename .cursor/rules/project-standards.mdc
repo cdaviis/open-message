@@ -5,6 +5,20 @@ alwaysApply: true
 
 # Pigeon Project Standards
 
+## Code design (SOLID and readability)
+
+- **SOLID**: We follow SOLID so the codebase stays easy to follow and extend.
+  - **Single Responsibility**: Each module/class has one clear purpose (e.g. interpolator = variable resolution; limits = chunking; each service = one platform). Split modules that grow multiple responsibilities.
+  - **Open/Closed**: Extend via new services (implement `ServiceAdapter`) and new template attributes; avoid changing core orchestration for every new feature.
+  - **Liskov Substitution**: All services are interchangeable via the `ServiceAdapter` interface; no caller should rely on a specific service type.
+  - **Interface Segregation**: Prefer small, focused interfaces (e.g. optional `compile?`, `getLimits?` on the adapter so not every service must implement everything).
+  - **Dependency Inversion**: Core depends on the `ServiceAdapter` abstraction and the service registry; it does not import concrete Slack/Notion implementations. New platforms are registered, not hard-coded into the pipeline.
+- **Function scope**: Keep helpers **module-private** (don’t export) when they’re only used inside one file. Export only the minimal surface needed by callers.
+- **Function size and complexity**: Prefer short, single-purpose functions. If a function does more than one logical step (e.g. “resolve destinations” and “send to each”), extract named helpers so the main flow reads like a high-level sequence. Avoid deep nesting; early returns and small functions keep logic easy to follow.
+
+## Template and product rules
+
+- **Template design is non-breaking**: We do NOT make non-backwards-compatible changes to the template processor. Existing template shapes must keep working. New attributes (e.g. `destination.settings`) are additive; legacy forms stay supported. If a breaking change were ever unavoidable, we would document it, add warnings, and alert users before removal. Design all template changes to be future-proof and extensible.
 - **Prefer templates and the DSL**: When adding or changing notifications, use Pigeon's template DSL (YAML/JSON templates) and Slack DSL blocks instead of hard‑coding payloads where possible.
 - **CI/CD friendly design**: Favour patterns that work well in CI/CD – e.g. using `pigeon send` with `--var`, `--dry-run`, and `--json` rather than bespoke scripts for Slack messages.
 - **Variable handling is case-sensitive**:

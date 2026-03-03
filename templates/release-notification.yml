@@ -1,0 +1,38 @@
+version: '1'
+name: Release Notification
+description: Post to #releases when a new release is published
+
+destination:
+  service: slack
+  settings:
+    channel: '{{SLACK_CHANNEL_RELEASES}}'
+
+variables:
+  tag_name:
+    description: Release tag (e.g. v1.2.0)
+    required: true
+  name:
+    description: Release title/name
+    required: true
+  # Set RELEASE_BODY in CI env to avoid shell escaping of multiline release notes
+  RELEASE_BODY:
+    description: Release notes body (or set env RELEASE_BODY in CI)
+    default: ''
+  html_url:
+    description: URL to the GitHub release page
+    required: true
+
+message:
+  blocks:
+    - header:
+        text: ':package: New release — {{name}}'
+    - section:
+        fields:
+          - '*Tag:*\n`{{tag_name}}`'
+          - '*Released:*\n{{now}}'
+    - section:
+        text: '{{RELEASE_BODY}}'
+    - section:
+        text: '<{{html_url}}|View release on GitHub>'
+    - context:
+        - '{{now}}'

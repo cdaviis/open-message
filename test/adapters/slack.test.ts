@@ -34,4 +34,22 @@ describe('SlackAdapter.send', () => {
       adapter.send({ blocks: [] }, {}, { botToken: 'xoxb-test' })
     ).rejects.toThrowError(AdapterValidationError);
   });
+
+  it('accepts channel from destination.settings (preferred)', async () => {
+    await expect(
+      adapter.send({ blocks: [] }, { settings: { channel: '#test' } }, {})
+    ).rejects.toThrowError(MissingCredentialsError);
+  });
+
+  it('accepts channel from destination.slack (legacy, backward compat)', async () => {
+    await expect(
+      adapter.send({ blocks: [] }, { slack: { channel: '#test' } }, {})
+    ).rejects.toThrowError(MissingCredentialsError);
+  });
+
+  it('accepts channel from top-level destination (legacy, backward compat)', async () => {
+    await expect(
+      adapter.send({ blocks: [] }, { channel: '#test' }, {})
+    ).rejects.toThrowError(MissingCredentialsError);
+  });
 });

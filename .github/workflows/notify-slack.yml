@@ -1,3 +1,4 @@
+# Notifies Slack when CI (tests) complete. Posts to #tests with link to the run.
 name: CI Slack Notification
 
 on:
@@ -6,10 +7,9 @@ on:
     types: [completed]
 
 jobs:
-  notify:
-    name: Notify Slack with PigeonJS
+  notify-tests:
+    name: Post to #tests
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -22,12 +22,13 @@ jobs:
       - name: Install PigeonJS CLI
         run: npm install -g pigeon-js
 
-      - name: Send CI notification to Slack
+      - name: Send test run notification to Slack
         env:
           SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+          SLACK_CHANNEL_TESTS: ${{ secrets.SLACK_CHANNEL_TESTS }}
         run: |
-          pigeon send ./templates/ci-build.yml \
-            --var status=success \
+          pigeon send ./templates/ci-tests.yml \
+            --var status="${{ github.event.workflow_run.conclusion }}" \
             --var branch="${{ github.event.workflow_run.head_branch }}" \
             --var sha="${{ github.event.workflow_run.head_sha }}" \
             --var workflow="${{ github.event.workflow_run.name }}" \

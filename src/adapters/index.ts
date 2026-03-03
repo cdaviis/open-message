@@ -1,15 +1,7 @@
-import type { ServiceAdapter } from '../types.js';
-import { UnknownServiceError } from '../types.js';
-import { SlackAdapter } from './slack.js';
+/**
+ * Adapters: re-export from services for backward compatibility.
+ * New code should use services; adapters remain the public entry for getAdapter / SlackAdapter.
+ */
 
-const adapters = new Map<string, ServiceAdapter>([
-  ['slack', new SlackAdapter()],
-]);
-
-export function getAdapter(service: string): ServiceAdapter {
-  const adapter = adapters.get(service);
-  if (!adapter) {
-    throw new UnknownServiceError(service, [...adapters.keys()]);
-  }
-  return adapter;
-}
+export { getService as getAdapter } from '../services/index.js';
+export { SlackService as SlackAdapter } from '../services/slack/slack.js';

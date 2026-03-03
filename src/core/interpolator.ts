@@ -92,15 +92,24 @@ export function interpolate(
     resolving: new Set(),
   };
 
-  const interpolatedDestination = walkAndInterpolate(template.destination, ctx) as PigeonTemplate['destination'];
   const interpolatedMessage = walkAndInterpolate(template.message, ctx) as Record<string, unknown>;
 
-  return {
+  const result: ResolvedTemplate = {
     ...template,
-    destination: interpolatedDestination,
     message: interpolatedMessage,
     _resolved: true,
   };
+
+  if (template.destination != null) {
+    result.destination = walkAndInterpolate(template.destination, ctx) as PigeonTemplate['destination'];
+  }
+  if (Array.isArray(template.destinations) && template.destinations.length > 0) {
+    result.destinations = template.destinations.map((d) =>
+      walkAndInterpolate(d, ctx)
+    ) as PigeonTemplate['destinations'];
+  }
+
+  return result;
 }
 
 export function collectTokens(node: unknown): string[] {

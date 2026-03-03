@@ -5,7 +5,7 @@ export default defineConfig({
     index: 'src/index.ts',
     'cli/index': 'src/cli/index.ts',
   },
-  format: ['esm', 'cjs'],
+  format: ['esm'],
   dts: true,
   clean: true,
   splitting: false,

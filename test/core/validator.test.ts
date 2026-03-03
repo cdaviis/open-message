@@ -47,6 +47,29 @@ describe('validateSchema', () => {
       validateSchema({ ...validTemplate, description: 'A description' })
     ).not.toThrow();
   });
+
+  it('passes for template with destinations (multi-destination)', () => {
+    const multi = {
+      version: '1' as const,
+      name: 'Multi',
+      destinations: [
+        { slack: { settings: { channel: '#tests' } } },
+        { slack: { settings: { channel: '#releases' } } },
+      ],
+      message: { blocks: [] },
+    };
+    expect(() => validateSchema(multi)).not.toThrow();
+  });
+
+  it('throws when neither destination nor destinations present', () => {
+    expect(() =>
+      validateSchema({
+        version: '1',
+        name: 'NoDest',
+        message: { text: 'hi' },
+      })
+    ).toThrow(/destination.*destinations|Either/);
+  });
 });
 
 describe('validateVariables', () => {

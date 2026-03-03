@@ -8,18 +8,31 @@ const TemplateVariableSchema = z.object({
   required: z.boolean().optional(),
 });
 
-const TemplateSchema = z.object({
-  version: z.literal('1'),
-  name: z.string().min(1, 'name is required'),
-  description: z.string().optional(),
-  destination: z
-    .object({
-      service: z.string().min(1, 'destination.service is required'),
-    })
-    .passthrough(),
-  variables: z.record(TemplateVariableSchema).optional(),
-  message: z.record(z.unknown()),
-});
+const DestinationEntrySchema = z
+  .object({
+    service: z.string().optional(),
+    settings: z.record(z.unknown()).optional(),
+  })
+  .passthrough();
+
+const TemplateSchema = z
+  .object({
+    version: z.literal('1'),
+    name: z.string().min(1, 'name is required'),
+    description: z.string().optional(),
+    destination: DestinationEntrySchema.optional(),
+    destinations: z.array(z.record(z.unknown())).optional(),
+    variables: z.record(TemplateVariableSchema).optional(),
+    message: z.record(z.unknown()),
+  })
+  .refine(
+    (t) => {
+      const hasSingle = t.destination != null && (t.destination as { service?: string }).service;
+      const hasMulti = Array.isArray(t.destinations) && t.destinations.length > 0;
+      return hasSingle || hasMulti;
+    },
+    { message: 'Either destination (with service) or non-empty destinations array is required' }
+  );
 
 export function validateSchema(template: unknown): asserts template is PigeonTemplate {
   const result = TemplateSchema.safeParse(template);

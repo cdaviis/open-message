@@ -59,3 +59,17 @@ jobs:
         run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Install PigeonJS CLI
+        run: npm install -g pigeon-js
+
+      - name: Notify #releases on Slack
+        env:
+          SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+          SLACK_CHANNEL_RELEASES: ${{ secrets.SLACK_CHANNEL_RELEASES }}
+          RELEASE_BODY: ${{ github.event.release.body }}
+        run: |
+          pigeon send ./templates/release-notification.yml \
+            --var tag_name="${{ github.event.release.tag_name }}" \
+            --var name="${{ github.event.release.name }}" \
+            --var html_url="${{ github.event.release.html_url }}"

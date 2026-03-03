@@ -30,7 +30,16 @@ export function validateCommand(): Command {
         }
 
         console.log(chalk.green('✓'), `Template ${chalk.bold(loaded.name)} is valid`);
-        console.log(`  Service: ${chalk.cyan(loaded.destination.service)}`);
+        if (loaded.destination?.service) {
+          console.log(`  Service: ${chalk.cyan(loaded.destination.service)}`);
+        } else if (Array.isArray(loaded.destinations) && loaded.destinations.length > 0) {
+          const services = loaded.destinations.map((d: Record<string, unknown>) => {
+            if (d.service) return d.service as string;
+            const key = Object.keys(d).find((k) => k !== 'service');
+            return key ?? '?';
+          });
+          console.log(`  Destinations: ${chalk.cyan(loaded.destinations.length)} (${[...new Set(services)].join(', ')})`);
+        }
         const varCount = Object.keys(variables).length;
         if (varCount > 0) {
           console.log(`  Variables: ${varCount}`);

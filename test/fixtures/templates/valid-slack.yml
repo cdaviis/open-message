@@ -4,7 +4,8 @@ description: Used in tests
 
 destination:
   service: slack
-  channel: '#test'
+  settings:
+    channel: '#test'
 
 variables:
   greeting:
