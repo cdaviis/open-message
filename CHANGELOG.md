@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.4](https://github.com/cdaviis/open-message/compare/v1.0.3...v1.0.4) (2026-03-03)
+
+
+### Bug Fixes
+
+* **ci:** revert to ubuntu-latest so workflows get runners ([488af4c](https://github.com/cdaviis/open-message/commit/488af4ca94c11d84890af67edda6ccf09462a3ab))
+* **ci:** use CodeQL analyze@v4 to match init@v4 ([19d1b06](https://github.com/cdaviis/open-message/commit/19d1b061bb8ba2aee6366f2debeb505d2ab200ba))
+
 ## [1.0.3](https://github.com/cdaviis/open-message/compare/v1.0.2...v1.0.3) (2026-03-03)
 
 
