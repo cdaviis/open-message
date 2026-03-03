@@ -19,15 +19,15 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install open-message CLI
-        run: npm install -g open-message
+      - name: Install and build
+        run: npm ci && npm run build
 
       - name: Send test run notification to Slack
         env:
           SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
           SLACK_CHANNEL_TESTS: ${{ secrets.SLACK_CHANNEL_TESTS }}
         run: |
-          open-message send ./templates/ci-tests.yml \
+          npx open-message send ./templates/ci-tests.yml \
             --var status="${{ github.event.workflow_run.conclusion }}" \
             --var branch="${{ github.event.workflow_run.head_branch }}" \
             --var sha="${{ github.event.workflow_run.head_sha }}" \
