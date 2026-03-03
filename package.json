@@ -2,9 +2,25 @@
   "name": "open-message",
   "version": "1.0.0",
   "description": "Template-first messaging tool for Slack, Notion, and more",
+  "keywords": [
+    "slack",
+    "notion",
+    "messaging",
+    "notifications",
+    "templates",
+    "cli"
+  ],
+  "homepage": "https://github.com/cdaviis/open-message#readme",
+  "bugs": {
+    "url": "https://github.com/cdaviis/open-message/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cdaviis/open-message.git"
+  },
+  "license": "MIT",
+  "author": "cdaviis",
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -12,8 +28,14 @@
       "default": "./dist/index.js"
     }
   },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "bin": {
-    "open-message": "./dist/cli/index.js"
+    "open-message": "dist/cli/index.js"
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "test"
   },
   "scripts": {
     "build": "tsup",
@@ -45,14 +67,5 @@
     "typescript": "^5.4.0",
     "typescript-eslint": "^8.56.1",
     "vitest": "^4.0.18"
-  },
-  "keywords": [
-    "slack",
-    "notion",
-    "messaging",
-    "notifications",
-    "templates",
-    "cli"
-  ],
-  "license": "MIT"
+  }
 }
